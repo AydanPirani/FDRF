@@ -17,16 +17,10 @@ namespace DRF {
         std::vector<RESOURCE_T> impl1_ram;
         std::vector<RESOURCE_T> impl2_ram;
 
-        RESOURCE_T min_cpu1 = std::numeric_limits<RESOURCE_T>::max();
-        RESOURCE_T max_cpu1 = std::numeric_limits<RESOURCE_T>::lowest();
-        RESOURCE_T min_ram1 = std::numeric_limits<RESOURCE_T>::max();
-        RESOURCE_T max_ram1 = std::numeric_limits<RESOURCE_T>::lowest();
-
-        RESOURCE_T min_cpu2 = std::numeric_limits<RESOURCE_T>::max();
-        RESOURCE_T max_cpu2 = std::numeric_limits<RESOURCE_T>::lowest();
-        RESOURCE_T min_ram2 = std::numeric_limits<RESOURCE_T>::max();
-        RESOURCE_T max_ram2 = std::numeric_limits<RESOURCE_T>::lowest();
-
+        RESOURCE_T min_cpu = std::numeric_limits<RESOURCE_T>::max();
+        RESOURCE_T max_cpu = std::numeric_limits<RESOURCE_T>::lowest();
+        RESOURCE_T min_ram = std::numeric_limits<RESOURCE_T>::max();
+        RESOURCE_T max_ram = std::numeric_limits<RESOURCE_T>::lowest();
 
         for (auto& [id, r] : shares1) {
             Resource resource1 = shares1.at(id);
@@ -36,38 +30,34 @@ namespace DRF {
             impl2_cpu.push_back(resource2._cpu);
             impl2_ram.push_back(resource2._ram);
 
-            min_cpu1 = std::min(min_cpu1, resource1._cpu);
-            max_cpu1 = std::max(max_cpu1, resource1._cpu);
-            min_ram1 = std::min(min_ram1, resource1._ram);
-            max_ram1 = std::max(max_ram1, resource1._ram);
+            min_cpu = std::min(min_cpu, resource1._cpu);
+            max_cpu = std::max(max_cpu, resource1._cpu);
+            min_ram = std::min(min_ram, resource1._ram);
+            max_ram = std::max(max_ram, resource1._ram);
 
-            min_cpu2 = std::min(min_cpu2, resource2._cpu);
-            max_cpu2 = std::max(max_cpu2, resource2._cpu);
-            min_ram2 = std::min(min_ram2, resource2._ram);
-            max_ram2 = std::max(max_ram2, resource2._ram);
-
+            min_cpu = std::min(min_cpu, resource2._cpu);
+            max_cpu = std::max(max_cpu, resource2._cpu);
+            min_ram = std::min(min_ram, resource2._ram);
+            max_ram = std::max(max_ram, resource2._ram);
         }
         
-        float cpu1_range = max_cpu1 - min_cpu1;
-        float ram1_range = max_ram1 - min_ram1;
-
-        float cpu2_range = max_cpu2 - min_cpu2;
-        float ram2_range = max_ram2 - min_ram2;
+        float cpu_range = max_cpu - min_cpu;
+        float ram_range = max_ram - min_ram;
 
         float diff = 0;
         for (size_t i = 0; i < impl1_cpu.size(); i++) {
 
-            float cpu_delta = abs((impl1_cpu[i]-min_cpu1)/cpu1_range - (impl2_cpu[i]-min_cpu2)/cpu2_range);
-            float ram_delta = abs((impl1_ram[i]-min_ram1)/ram1_range - (impl2_ram[i]-min_ram2)/cpu2_range);
+            float cpu_delta = abs(impl1_cpu[i] - impl2_cpu[i])/cpu_range;
+            float ram_delta = abs(impl1_ram[i] - impl2_ram[i])/ram_range;
             
             diff += cpu_delta*cpu_delta + ram_delta*ram_delta;
         }
 
-        return diff/(2*impl1_cpu.size());
+        return 100 * diff/(2*impl1_cpu.size());
     }
 
     void test(DRFImplementation& impl1, DRFImplementation& impl2) {
-        Resource initialResources(9LL*1024LL*1024LL, 18LL*1024LL*1024LL);
+        Resource initialResources(9LL*1024LL*1024LL*12LL, 18LL*1024LL*1024LL*12LL);
         const int numProcesses = 2000;
 
         impl1.init(initialResources);

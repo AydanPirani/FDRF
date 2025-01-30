@@ -14,7 +14,7 @@ int main() {
     ExactQueue eq;
     FuzzyQueue fq;
 
-    DRF::test((DRFImplementation&) eq, (DRFImplementation&) fq);
+    test(eq, fq);
 
     // eq.init(initialResources);
     // eq.registerProcess(1, aResource);

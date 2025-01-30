@@ -1,7 +1,6 @@
 #ifndef DRF_FUZZY_H
 #define DRF_FUZZY_H
 
-#include "common.h"
 #include "drf_implementation.h"
 
 #include <unordered_set>

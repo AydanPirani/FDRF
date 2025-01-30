@@ -1,8 +1,8 @@
 #ifndef DRF_IMPLEMENTATION_H
 #define DRF_IMPLEMENTATION_H
 
-#include "common.h"
 #include "resource.h"
+#include "types.h"
 #include <unordered_map>
 
 namespace DRF {

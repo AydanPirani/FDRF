@@ -3,6 +3,7 @@
 
 #include <string>
 #include "common.h"
+#include "types.h"
 
 namespace DRF {
     struct Resource {

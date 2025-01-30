@@ -1,7 +1,6 @@
 #ifndef DRF_EXACT_H
 #define DRF_EXACT_H
 
-#include "resource.h"
 #include "drf_implementation.h"
 
 #include <queue>

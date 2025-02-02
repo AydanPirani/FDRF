@@ -36,3 +36,9 @@ obj/
 *.exe
 *.out
 *.app
+
+# CMakefiles
+CMakeFiles
+CMakeCache.txt
+cmake_install.cmake
+Makefile
